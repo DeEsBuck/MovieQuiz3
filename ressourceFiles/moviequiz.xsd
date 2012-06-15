@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.example.org/moviequiz" 
+	xmlns:mvns="http://www.example.org/moviequiz" 
+	elementFormDefault="qualified">
+	
+	<element name="quizgame">
+		<complexType>
+		    <sequence>
+		    	<element name="quizfrage" minOccurs="1" maxOccurs="unbounded">
+		    		<complexType>
+					    <sequence>
+					    	<element name="genre" type="string" />
+					    	<element name="bild">
+					    		<complexType>
+					    			<attribute name="link" type="anyURI" />
+					    		</complexType>
+					    	</element>
+					        <element name="antwort"  maxOccurs="4">
+					        	<complexType>
+					        		<simpleContent>
+					        			<extension base="string">
+					        				<attribute name="result" type="boolean" />
+					        			</extension>
+					        		</simpleContent>
+					        	</complexType>
+					        </element>
+					    </sequence>
+					    <attribute name="time" type="time" />
+					    <attribute name="nr" type="mvns:question_nr" />
+	    			</complexType>
+		    	</element>
+		    	<element name="highscore" >
+		    		<complexType>
+		    			<sequence>
+		    				<element name="score" type="mvns:score_typ" />
+		    				<element name="from" type="string" />
+		    			</sequence>
+		    		</complexType>
+		    	</element>
+		    </sequence>
+	    </complexType>
+	</element>
+    
+    <simpleType name="question_nr">
+    	<restriction base="integer">
+			<minInclusive value="1" />
+			<maxInclusive value="300" />
+    	</restriction>
+    </simpleType>
+    
+    <simpleType name="score_typ">
+    	<restriction base="nonNegativeInteger">
+	    	<pattern value="([1-9][0-9]*)" />
+	    </restriction>
+    </simpleType>
+</schema>
