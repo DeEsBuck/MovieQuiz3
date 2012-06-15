@@ -77,7 +77,7 @@ public class MVQService {
 		//Spieler benennen und Spielstand für aktuelles Spiel
 		Player player1 = creator.createPlayer(name, rand.nextInt(100), 0, 0);
 		playerslist.add(player1);
-		players.getPlayer().addAll(playerslist);
+		players.getPlayer().add(player1);
 		
 		creator.marshalPlayers(PLAYER_XML, players);
 		return players;
@@ -97,9 +97,44 @@ public class MVQService {
 	@GET @Produces( "application/xml" )
 	public Players killPlayer(@PathParam("id")int id) throws JAXBException, FileNotFoundException, IOException
 	{
-		if(playerslist.getId()==id){
-			playerslist.remove(player);
+		XMLHelper creator = new XMLHelper();
+		Player found = new Player();
+		for(int i=0;i < players.getPlayer().size();i++){
+			found = players.getPlayer().get(i);
+			if (found.getId()==id){
+				players.getPlayer().remove(i);
+				creator.marshalPlayers(PLAYER_XML, players);
+			}
 		}
+		
+		return players;
+	}
+	
+	/**
+	 * Anzeigen der Spieler Daten 
+	 * @param id
+	 * @return
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	@Path("/player/{id}")
+	@GET @Produces( "application/xml" )
+	public Players getPlayer(@PathParam("id")int id) throws JAXBException, FileNotFoundException, IOException
+	{
+		Player found = new Player();
+		
+		for(int i=0;i < players.getPlayer().size();i++){
+			found = players.getPlayer().get(i);
+			if (found.getId()==id){
+				System.out.println("Spieler hat nr. "+found.getId());
+				System.out.println("Spieler hat name "+found.getName());
+				System.out.println(found.getName()+" hat gewonnen "+found.getWins());
+				System.out.println(found.getName()+" hat verloren "+found.getLoss());
+			}
+			
+		}
+		
 		return players;
 	}
 	
@@ -117,10 +152,14 @@ public class MVQService {
 	@GET @Produces( "application/xml" )
 	public Players updatePlayer(@PathParam("id") int id, @QueryParam("wins") int wins, @QueryParam("loss") int loss) throws JAXBException, FileNotFoundException, IOException
 	{
-		
-		
-		
-		return null;
+		Player found = new Player();
+		XMLHelper creator = new XMLHelper();
+		for(int i=0;i < players.getPlayer().size();i++){
+			found = players.getPlayer().get(i);
+			creator.updatePlayer(id, wins, loss, found);
+			creator.marshalPlayers(PLAYER_XML, players);
+		}
+		return players;
 	}
 	
 	
@@ -141,20 +180,7 @@ public class MVQService {
 		Quizgame quiz = marsh.unmarshalQuizgame(QUIZ_XML);
 			
 		Quizgame gen = obj.createQuizgame();
-		Iterable<Quizfrage> fragen = gen.getQuizfrage();
-		String sam;
-		ArrayList<Quizfrage> liste = new ArrayList<Quizfrage>();
-			
-		// alle Quizfragen durchlaufen und genre vgl.
-		for ( Quizfrage i: fragen ) {
-			sam = fragen.iterator().next().getGenre();
-			if (sam.compareToIgnoreCase(genre) != 0){
-				System.out.println("Fehler bei Genre"); 
-			}
-			else {
-			    liste.add(i);
-			}
-		}
+		
 		return gen;	
 	}
 
@@ -170,24 +196,7 @@ public class MVQService {
 	@GET @Produces( "application/xml" )
 	public Quizgame getFrage(@PathParam("genre") String genre,@PathParam("id") int i) throws JAXBException, FileNotFoundException
 	{
-		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
-		XMLHelper marsh = new XMLHelper();
-		Quizgame quiz = marsh.unmarshalQuizgame(QUIZ_XML);
-			
-		Quizgame frage = obj.createQuizgame();
-		Quizfrage gen = obj.createQuizgameQuizfrage();
-		frage.getQuizfrage().add(quiz.getQuizfrage().get(i-1));
-			
-		try {
-			String test = gen.getGenre();
-			if (test.compareToIgnoreCase(genre) != 0){
-				System.out.println(test);
-				return frage;
-			}
-		}
-		catch (NullPointerException e){
-			System.out.println("Genre nicht gefunden.");
-		}
+		
 			
 		return frage;
 	}
