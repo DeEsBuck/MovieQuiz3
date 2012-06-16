@@ -34,8 +34,6 @@ import de.xml.Players;
 public class XMLHelper {
 	
 	
-	
-	
 	/**
 	 * Erzeugt 4 Antwortmöglichkeiten, die mit der Funktion createAntwort erfasst werden. 
 	 * Diese ArrayList muss in createFrage() übergeben werden.
@@ -169,8 +167,7 @@ public class XMLHelper {
 	 * @param score
 	 * @return
 	 */
-	public Highscore createHighscore(String name, BigInteger score){
-		Highscore hscore = new Highscore();
+	public Highscore createHighscore(String name, BigInteger score, Highscore hscore){
 		hscore.setFrom(name);
 		hscore.setScore(score);
 		return hscore;
@@ -244,5 +241,28 @@ public class XMLHelper {
 			}
 		}
 		return player;
+	}
+	
+	public Quizgame marshalQuizgame(String file) throws JAXBException, IOException  {
+		Quizgame quiz = new Quizgame();
+		JAXBContext context = JAXBContext.newInstance(Quizgame.class);
+		Marshaller m = context.createMarshaller();
+		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		m.marshal(quiz, System.out);
+		
+		Writer wr = null;
+		try {
+			wr = new FileWriter(file);
+			m.marshal(quiz, wr);
+		}
+		finally {
+			try {
+				wr.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return quiz;
 	}
 }

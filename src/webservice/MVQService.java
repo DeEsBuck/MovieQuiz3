@@ -4,6 +4,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -198,7 +199,8 @@ public class MVQService {
 	}
 
 	/**
-	 * Antworten einer Quizfrage zum Genre, entnimmt dabei erste frage aus der Queue
+	 * Antworten einer Quizfrage zum Genre, entnimmt dabei erste frage aus der Queue.
+	 * Verbesserungsvorschlag: Fragen eines Genres in einer Liste speichern und iterieren.
 	 * @param genre
 	 * @param i
 	 * @return
@@ -263,4 +265,51 @@ public class MVQService {
 		return frage;
 	}
 
+	/**
+	 * Zeige höchsten Score mit Spieler
+	 * @return
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 */
+	@Path("/highscore")
+	@GET @Produces( "application/xml" )
+	public Quizgame getHighscore() throws JAXBException, FileNotFoundException
+	{
+		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
+		XMLHelper marsh = new XMLHelper();
+		Quizgame.Highscore highscore = obj.createQuizgameHighscore();
+		Quizgame hscore = marsh.unmarshalQuizgame(QUIZ_XML);
+		highscore = hscore.getHighscore();
+		System.out.println("HighScore: "+highscore.getScore());
+		System.out.println("von "+highscore.getFrom());
+		
+		return hscore;
+	}
+	
+	/**
+	 * Update höchsten Score 
+	 * @return
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 */
+	@Path("/highscore/update")
+	@GET @Produces( "application/xml" )
+	public Quizgame updateHighscore(@QueryParam("name") String name, @QueryParam("score") BigInteger score) throws JAXBException, FileNotFoundException, IOException
+	{
+		
+
+
+//		playerslist.add(player1);
+//		players.getPlayer().add(player1);
+
+		
+		XMLHelper creator = new XMLHelper();
+		Quizgame quiz = new Quizgame();
+		Quizgame.Highscore highscore = new Quizgame.Highscore();
+		
+		Quizgame.Highscore hscore = creator.createHighscore(name, score, highscore);
+		quiz = creator.marshalQuizgame(QUIZ_XML);
+		
+		return quiz;
+	}
 }
