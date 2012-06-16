@@ -27,6 +27,7 @@ import de.xml.Quizgame.Quizfrage.Bild;
 public class MVQService {
 	private static final String QUIZ_XML= "./././ressourceFiles/quiz.xml";
 	private static final String PLAYER_XML= "./././ressourceFiles/player.xml";
+	private static final String GENRE_XML= "./././ressourceFiles/genre.xml";
 	private static final String LINK="http://localhost:4434/bild/nr";
 	
 	private static ArrayList<Player> playerslist = new ArrayList<Player>(); // Liste aler Player, wird in Players angehängt
@@ -170,34 +171,64 @@ public class MVQService {
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 */
-	@Path("/fragen/{genre}")
+	@Path("/{genre}/fragen")
 	@GET @Produces( "application/xml" )
-	public Quizgame getFrage(@PathParam("genre") String genre) throws JAXBException, FileNotFoundException
+	public Quizgame getAllFragen(@PathParam("genre") String genre) throws JAXBException, FileNotFoundException, IOException
 	{
 		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
-			
 		XMLHelper marsh = new XMLHelper();
-		Quizgame quiz = marsh.unmarshalQuizgame(QUIZ_XML);
-			
-		Quizgame gen = obj.createQuizgame();
+		Quizfrage found = obj.createQuizgameQuizfrage();
+		Antwort antw = obj.createQuizgameQuizfrageAntwort();
+		Quizgame frage = marsh.unmarshalQuizgame(QUIZ_XML);
+		for(int i=0; i<frage.getQuizfrage().size(); i++){
+			found = frage.getQuizfrage().get(i);
+			if (found.getGenre().compareToIgnoreCase(genre) == 0){
+				System.out.println("\nFrage Nr: "+found.getNr());
+				System.out.println("Bild link: "+found.getBild().getLink());
+				System.out.println("Genre: "+found.getGenre());
+				System.out.println("Zeit: "+found.getTime());
+				for(int j=0; j<frage.getQuizfrage().get(i).getAntwort().size(); j++){
+					antw = frage.getQuizfrage().get(i).getAntwort().get(j);
+					System.out.println("Antwort"+(j+1)+": "+antw.getValue());
+				}
+			}
+		}
 		
-		return gen;	
+		return frage;	
 	}
 
 	/**
-	 * Einzelne Quizfrage mit Antworten zum Genre
+	 * Antworten einer Quizfrage zum Genre, entnimmt dabei erste frage aus der Queue
 	 * @param genre
 	 * @param i
 	 * @return
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 */
-	@Path("/fragen/{genre}/{id}")
+	@Path("/{genre}/frage")
 	@GET @Produces( "application/xml" )
-	public Quizgame getFrage(@PathParam("genre") String genre,@PathParam("id") int i) throws JAXBException, FileNotFoundException
+	public Quizgame getFrage(@PathParam("genre") String genre) throws JAXBException, FileNotFoundException
 	{
+		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
+		XMLHelper marsh = new XMLHelper();
+		Quizfrage found = obj.createQuizgameQuizfrage();
+		Antwort antw = obj.createQuizgameQuizfrageAntwort();
+		Quizgame frage = marsh.unmarshalQuizgame(QUIZ_XML);
+		for(int i=0; i<frage.getQuizfrage().size(); i++){
+			found = frage.getQuizfrage().get(i);
+			if (found.getGenre().compareToIgnoreCase(genre) == 0){
+				System.out.println("\nFrage Nr: "+found.getNr());
+				System.out.println("Bild link: "+found.getBild().getLink());
+				System.out.println("Genre: "+found.getGenre());
+				System.out.println("Zeit: "+found.getTime());
+				for(int j=0; j<frage.getQuizfrage().get(i).getAntwort().size(); j++){
+					antw = frage.getQuizfrage().get(i).getAntwort().get(j);
+					System.out.println("Antwort"+(j+1)+": "+antw.getValue());
+				}
+				break;
+			}
+		}
 		
-			
 		return frage;
 	}
 
@@ -213,10 +244,22 @@ public class MVQService {
 	{
 		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
 		XMLHelper marsh = new XMLHelper();
-		Quizgame quiz = marsh.unmarshalQuizgame(QUIZ_XML);
-			
-		Quizgame frage = obj.createQuizgame();
-		frage.getQuizfrage();
+		Quizfrage found = obj.createQuizgameQuizfrage();
+		Antwort antw = obj.createQuizgameQuizfrageAntwort();
+		Quizgame frage = marsh.unmarshalQuizgame(QUIZ_XML);
+		
+		for(int i=0; i<frage.getQuizfrage().size(); i++){
+			found = frage.getQuizfrage().get(i);
+			System.out.println("\nFrage Nr: "+found.getNr());
+			System.out.println("Bild link: "+found.getBild().getLink());
+			System.out.println("Genre: "+found.getGenre());
+			System.out.println("Zeit: "+found.getTime());
+			for(int j=0; j<frage.getQuizfrage().get(i).getAntwort().size(); j++){
+			antw = frage.getQuizfrage().get(i).getAntwort().get(j);
+				System.out.println("Antwort"+(j+1)+": "+antw.getValue());
+			}
+		}
+		
 		return frage;
 	}
 

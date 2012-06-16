@@ -51,13 +51,19 @@ public class TestXMLWriter {
 		
 		//Antwortliste mit bis zu 4 Möglichkeiten
 		ArrayList<Antwort> antworten = creator.createAntwortList(true, "Die Vögel", false, "Drakula", false, "Hanni und Nanni", false, "Pokemon");
-		ArrayList<Antwort> antworten2 = creator.createAntwortList(true, "Dragonball Z", false, "Bones", false, "Zombie Land", false, "sDuck Tales");
+		ArrayList<Antwort> antworten2 = creator.createAntwortList(true, "Dragonball U", false, "Bones", false, "Zombie Land", false, "sDuck Tales");
+		ArrayList<Antwort> antworten3 = creator.createAntwortList(true, "Dragonball GT", false, "Bones", false, "Zombie Land", false, "Duck Tales");
+		ArrayList<Antwort> antworten4 = creator.createAntwortList(true, "Dragonball Z", false, "Bones", false, "Zombie Land", false, "Duck Tales");
 		
 		//Einzelne Filme mit Antwortauswahl von darüber
 		Quizgame.Quizfrage frage = creator.createFrage("Komödie",1,null,link,antworten);
 		fragen.add(frage);
 		Quizgame.Quizfrage frage2 = creator.createFrage("Drama",2,null,link,antworten2);
 		fragen.add(frage2);
+		Quizgame.Quizfrage frage3 = creator.createFrage("Drama",3,null,link,antworten3);
+		fragen.add(frage3);
+		Quizgame.Quizfrage frage4 = creator.createFrage("Drama",4,null,link,antworten4);
+		fragen.add(frage4);
 		
 		//Zuweisung der Element an das Root Quizgame
 		quiz.getQuizfrage().addAll(fragen);
