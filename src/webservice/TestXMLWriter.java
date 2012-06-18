@@ -13,6 +13,7 @@ import javax.xml.bind.Marshaller;
 import de.xml.Players;
 import de.xml.Players.Player;
 import de.xml.Quizgame;
+import de.xml.Quizgame.Highscore;
 import de.xml.Quizgame.Quizfrage.Antwort;
 import de.xml.Quizgame.Quizfrage.Bild;
 
@@ -44,7 +45,8 @@ public class TestXMLWriter {
 		player.getPlayer().addAll(players);
 		
 		//Elemente für Quizfrage deklarieren
-		Quizgame.Highscore highscore = creator.createHighscore("Hans", BigInteger.valueOf(2000));
+		Highscore hscore = new Highscore();
+		Quizgame.Highscore highscore = creator.createHighscore("Hans", BigInteger.valueOf(2000), hscore);
 		//XMLGregorianCalendar time = new GregorianCalendar();
 		Quizgame.Quizfrage.Bild link = new Bild();
 		link.setLink(LINK);

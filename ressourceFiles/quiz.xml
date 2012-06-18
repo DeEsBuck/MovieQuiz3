@@ -1,2 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<quizgame xmlns="http://www.example.org/moviequiz"/>
+<quizgame xmlns="http://www.example.org/moviequiz">
+    <quizfrage nr="1">
+        <genre>Komödie</genre>
+        <bild link="http://localhost:4434/bild/nr"/>
+        <antwort result="true">Die Vögel</antwort>
+        <antwort result="false">Drakula</antwort>
+        <antwort result="false">Hanni und Nanni</antwort>
+        <antwort result="false">Pokemon</antwort>
+    </quizfrage>
+    <quizfrage nr="2">
+        <genre>Drama</genre>
+        <bild link="http://localhost:4434/bild/nr"/>
+        <antwort result="true">Dragonball U</antwort>
+        <antwort result="false">Bones</antwort>
+        <antwort result="false">Zombie Land</antwort>
+        <antwort result="false">sDuck Tales</antwort>
+    </quizfrage>
+    <quizfrage nr="3">
+        <genre>Drama</genre>
+        <bild link="http://localhost:4434/bild/nr"/>
+        <antwort result="true">Dragonball GT</antwort>
+        <antwort result="false">Bones</antwort>
+        <antwort result="false">Zombie Land</antwort>
+        <antwort result="false">Duck Tales</antwort>
+    </quizfrage>
+    <quizfrage nr="4">
+        <genre>Drama</genre>
+        <bild link="http://localhost:4434/bild/nr"/>
+        <antwort result="true">Dragonball Z</antwort>
+        <antwort result="false">Bones</antwort>
+        <antwort result="false">Zombie Land</antwort>
+        <antwort result="false">Duck Tales</antwort>
+    </quizfrage>
+    <highscore>
+        <score>100000</score>
+        <from>Arnoderdritte</from>
+    </highscore>
+</quizgame>

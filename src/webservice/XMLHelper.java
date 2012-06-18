@@ -243,8 +243,7 @@ public class XMLHelper {
 		return player;
 	}
 	
-	public Quizgame marshalQuizgame(String file) throws JAXBException, IOException  {
-		Quizgame quiz = new Quizgame();
+	public Quizgame marshalQuizgame(String file, Quizgame quiz) throws JAXBException, IOException  {
 		JAXBContext context = JAXBContext.newInstance(Quizgame.class);
 		Marshaller m = context.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);

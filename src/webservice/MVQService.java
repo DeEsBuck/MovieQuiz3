@@ -295,21 +295,15 @@ public class MVQService {
 	@Path("/highscore/update")
 	@GET @Produces( "application/xml" )
 	public Quizgame updateHighscore(@QueryParam("name") String name, @QueryParam("score") BigInteger score) throws JAXBException, FileNotFoundException, IOException
-	{
-		
-
-
-//		playerslist.add(player1);
-//		players.getPlayer().add(player1);
-
-		
+	{	
+		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
 		XMLHelper creator = new XMLHelper();
-		Quizgame quiz = new Quizgame();
-		Quizgame.Highscore highscore = new Quizgame.Highscore();
+		Quizgame unquiz = creator.unmarshalQuizgame(QUIZ_XML);
+		Quizgame.Highscore highscore = obj.createQuizgameHighscore();		
 		
 		Quizgame.Highscore hscore = creator.createHighscore(name, score, highscore);
-		quiz = creator.marshalQuizgame(QUIZ_XML);
+		unquiz.setHighscore(hscore);
 		
-		return quiz;
+		return creator.marshalQuizgame(QUIZ_XML, unquiz);
 	}
 }
