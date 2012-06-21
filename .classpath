@@ -2,15 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/smack_3_2_2/smack.jar"/>
-	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/smack_3_2_2/smackx.jar"/>
-	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/smack_3_2_2/smackx-debug.jar"/>
-	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/smack_3_2_2/smackx-jingle.jar"/>
 	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/jersey-archive-1.1.5.1/lib/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/jersey-archive-1.1.5.1/lib/jersey-client-1.1.5.1.jar"/>
 	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/jersey-archive-1.1.5.1/lib/jersey-core-1.1.5.1.jar"/>
 	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/jersey-archive-1.1.5.1/lib/jersey-server-1.1.5.1.jar"/>
 	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/jersey-archive-1.1.5.1/lib/jsr311-api-1.1.1.jar"/>
 	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/grizzly-servlet-webserver-1.9.9.jar"/>
+	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/smack_3_2_2/smack.jar"/>
+	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/smack_3_2_2/smackx.jar"/>
+	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/smack_3_2_2/smackx-debug.jar"/>
+	<classpathentry kind="lib" path="/home/doro/Projekte/WBA2/smack_3_2_2/smackx-jingle.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

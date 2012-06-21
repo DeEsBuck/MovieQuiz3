@@ -225,7 +225,7 @@ public class XMLHelper {
 		JAXBContext context = JAXBContext.newInstance(Players.class);
 		Marshaller m = context.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		m.marshal(player, System.out);
+//		m.marshal(player, System.out);
 		
 		Writer wr = null;
 		try {
@@ -247,7 +247,7 @@ public class XMLHelper {
 		JAXBContext context = JAXBContext.newInstance(Quizgame.class);
 		Marshaller m = context.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		m.marshal(quiz, System.out);
+//		m.marshal(quiz, System.out);
 		
 		Writer wr = null;
 		try {

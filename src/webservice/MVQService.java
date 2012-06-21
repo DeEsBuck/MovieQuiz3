@@ -14,6 +14,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 import de.xml.Players;
@@ -28,7 +29,6 @@ import de.xml.Quizgame.Quizfrage.Bild;
 public class MVQService {
 	private static final String QUIZ_XML= "./././ressourceFiles/quiz.xml";
 	private static final String PLAYER_XML= "./././ressourceFiles/player.xml";
-	private static final String GENRE_XML= "./././ressourceFiles/genre.xml";
 	private static final String LINK="http://localhost:4434/bild/nr";
 	
 	private static ArrayList<Player> playerslist = new ArrayList<Player>(); // Liste aler Player, wird in Players angehängt
@@ -40,7 +40,6 @@ public class MVQService {
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 */
-	@GET @Produces( "application/xml" )
 	public Quizgame getAll() throws JAXBException, FileNotFoundException
 	{		
 		XMLHelper marsh = new XMLHelper();
@@ -54,8 +53,6 @@ public class MVQService {
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 */
-	@Path("/players")
-	@GET @Produces( "application/xml" )
 	public Players getAllPlayer() throws JAXBException, FileNotFoundException
 	{
 		XMLHelper marsh = new XMLHelper();
@@ -65,25 +62,20 @@ public class MVQService {
 	
 	/**
 	 * player.xml wird durch neuen Spieler mit "eindeutiger" ID und Name überschrieben.
-	 * id ist momentan eine zufällige Zahl zwischen 0 und 100
+	 * id ist momentan eine zufällige Zahl zwischen 0 und 10000
 	 * @return void
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 */
-	@Path("/player")
-	@GET @Produces( "application/xml" )
-	public Players setPlayer(@QueryParam("name")String name) throws JAXBException, FileNotFoundException, IOException
+	public void setPlayer(String name) throws JAXBException, FileNotFoundException, IOException
 	{
 		XMLHelper creator = new XMLHelper();
 		Random rand = new Random();
-		//Spieler benennen und Spielstand für aktuelles Spiel
-		Player player1 = creator.createPlayer(name, rand.nextInt(100), 0, 0);
+		Player player1 = creator.createPlayer(name, rand.nextInt(10000), 0, 0);
 		playerslist.add(player1);
 		players.getPlayer().add(player1);
 		
-		creator.marshalPlayers(PLAYER_XML, players);
-		return players;
-		
+		creator.marshalPlayers(PLAYER_XML, players);		
 	}
 	
 	/**
@@ -95,9 +87,7 @@ public class MVQService {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	@Path("/player/delete/{id}")
-	@GET @Produces( "application/xml" )
-	public Players killPlayer(@PathParam("id")int id) throws JAXBException, FileNotFoundException, IOException
+	public void killPlayer(int id) throws JAXBException, FileNotFoundException, IOException
 	{
 		XMLHelper creator = new XMLHelper();
 		Player found = new Player();
@@ -108,36 +98,110 @@ public class MVQService {
 				creator.marshalPlayers(PLAYER_XML, players);
 			}
 		}
-		
-		return players;
 	}
 	
 	/**
 	 * Anzeigen der Spieler Daten 
+	 * OHNE FUNKTION, NICHT VERWENDEN!!!!
 	 * @param id
 	 * @return
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	@Path("/player/{id}")
-	@GET @Produces( "application/xml" )
-	public Players getPlayer(@PathParam("id")int id) throws JAXBException, FileNotFoundException, IOException
+	public void getPlayerData(int jid, String name, int loss, int wins) throws JAXBException, FileNotFoundException, IOException
 	{
 		Player found = new Player();
 		
 		for(int i=0;i < players.getPlayer().size();i++){
 			found = players.getPlayer().get(i);
-			if (found.getId()==id){
-				System.out.println("Spieler hat nr. "+found.getId());
-				System.out.println("Spieler hat name "+found.getName());
-				System.out.println(found.getName()+" hat gewonnen "+found.getWins());
-				System.out.println(found.getName()+" hat verloren "+found.getLoss());
+			if (found.getId()==jid){
+				name = found.getName();
+				wins = found.getWins();
+				loss = found.getLoss();
 			}
-			
 		}
-		
-		return players;
+	}
+	
+	
+	/**
+	 * 
+	 * @param jid
+	 * @return
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public int getPlayerid(String jid) throws JAXBException, FileNotFoundException, IOException
+	{
+		Player found = new Player();
+		for(int i=0;i < players.getPlayer().size();i++){
+			found = players.getPlayer().get(i);
+			if (found.getName()==jid){
+				return found.getId();
+			}
+		}
+		return found.getId();
+	}
+	
+	/**
+	 * 
+	 * @param jid
+	 * @return
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public String getPlayerName(int jid) throws JAXBException, FileNotFoundException, IOException
+	{
+		Player found = new Player();
+		for(int i=0;i < players.getPlayer().size();i++){
+			found = players.getPlayer().get(i);
+			if (found.getId()==jid){
+				return found.getName();
+			}
+		}
+		return found.getName();
+	}
+	
+	/**
+	 * 
+	 * @param jid
+	 * @return
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public int getPlayerWinners(int jid) throws JAXBException, FileNotFoundException, IOException
+	{
+		Player found = new Player();
+		for(int i=0;i < players.getPlayer().size();i++){
+			found = players.getPlayer().get(i);
+			if (found.getId()==jid){
+				return found.getWins();
+			}
+		}
+		return found.getWins();
+	}
+	
+	/**
+	 * 
+	 * @param jid
+	 * @return
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public int getPlayerLooses(int jid) throws JAXBException, FileNotFoundException, IOException
+	{
+		Player found = new Player();
+		for(int i=0;i < players.getPlayer().size();i++){
+			found = players.getPlayer().get(i);
+			if (found.getId()==jid){
+				return found.getLoss();
+			}
+		}
+		return found.getLoss();
 	}
 	
 	/**
@@ -145,14 +209,12 @@ public class MVQService {
 	 * @param id
 	 * @param wins
 	 * @param loss
-	 * @return
+	 * @return void
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	@Path("/player/update/{id}")
-	@GET @Produces( "application/xml" )
-	public Players updatePlayer(@PathParam("id") int id, @QueryParam("wins") int wins, @QueryParam("loss") int loss) throws JAXBException, FileNotFoundException, IOException
+	public void updatePlayer(int id, int wins, int loss) throws JAXBException, FileNotFoundException, IOException
 	{
 		Player found = new Player();
 		XMLHelper creator = new XMLHelper();
@@ -161,140 +223,194 @@ public class MVQService {
 			creator.updatePlayer(id, wins, loss, found);
 			creator.marshalPlayers(PLAYER_XML, players);
 		}
-		return players;
 	}
 	
-	
 	/**
-	 * Zeige alle Quizfragen zum Genre (nicht für Spieler relevant)
+	 * Gebe zur Frage <code>nr</code> alle Daten über Parameter zurück 
+	 * OHNE FUNKTION, NICHT VERWENDEN!!!!
+	 * @param nr
+	 * @param link
 	 * @param genre
-	 * @return
+	 * @param time
+	 * @param antworten
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 */
-	@Path("/{genre}/fragen")
-	@GET @Produces( "application/xml" )
-	public Quizgame getAllFragen(@PathParam("genre") String genre) throws JAXBException, FileNotFoundException, IOException
+	public void getFrageDatas(Integer nr, String link, String genre, XMLGregorianCalendar time) throws JAXBException, FileNotFoundException
 	{
 		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
 		XMLHelper marsh = new XMLHelper();
 		Quizfrage found = obj.createQuizgameQuizfrage();
 		Antwort antw = obj.createQuizgameQuizfrageAntwort();
 		Quizgame frage = marsh.unmarshalQuizgame(QUIZ_XML);
+		
 		for(int i=0; i<frage.getQuizfrage().size(); i++){
 			found = frage.getQuizfrage().get(i);
-			if (found.getGenre().compareToIgnoreCase(genre) == 0){
-				System.out.println("\nFrage Nr: "+found.getNr());
-				System.out.println("Bild link: "+found.getBild().getLink());
-				System.out.println("Genre: "+found.getGenre());
-				System.out.println("Zeit: "+found.getTime());
+			if (found.getNr() == nr.intValue()){
+				link = found.getBild().getLink();
+				genre = found.getGenre();
+				time = found.getTime();
 				for(int j=0; j<frage.getQuizfrage().get(i).getAntwort().size(); j++){
 					antw = frage.getQuizfrage().get(i).getAntwort().get(j);
-					System.out.println("Antwort"+(j+1)+": "+antw.getValue());
+					System.out.println("\nAntwort"+(j+1)+":"+antw.getValue());
 				}
 			}
 		}
 		
-		return frage;	
 	}
-
+	
 	/**
-	 * Antworten einer Quizfrage zum Genre, entnimmt dabei erste frage aus der Queue.
-	 * Verbesserungsvorschlag: Fragen eines Genres in einer Liste speichern und iterieren.
-	 * @param genre
-	 * @param i
-	 * @return
+	 * Gebe Antworten Liste zu Frage <code>nr</code>
+	 * @param nr
+	 * @return ArrayList<String>
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 */
-	@Path("/{genre}/frage")
-	@GET @Produces( "application/xml" )
-	public Quizgame getFrage(@PathParam("genre") String genre) throws JAXBException, FileNotFoundException
+	public ArrayList<String> getAntworten(Integer nr) throws JAXBException, FileNotFoundException
 	{
 		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
 		XMLHelper marsh = new XMLHelper();
 		Quizfrage found = obj.createQuizgameQuizfrage();
 		Antwort antw = obj.createQuizgameQuizfrageAntwort();
 		Quizgame frage = marsh.unmarshalQuizgame(QUIZ_XML);
+		ArrayList<String> antworten = new ArrayList<String>();
+		
 		for(int i=0; i<frage.getQuizfrage().size(); i++){
 			found = frage.getQuizfrage().get(i);
-			if (found.getGenre().compareToIgnoreCase(genre) == 0){
-				System.out.println("\nFrage Nr: "+found.getNr());
-				System.out.println("Bild link: "+found.getBild().getLink());
-				System.out.println("Genre: "+found.getGenre());
-				System.out.println("Zeit: "+found.getTime());
+			if (found.getNr() == nr.intValue()){
 				for(int j=0; j<frage.getQuizfrage().get(i).getAntwort().size(); j++){
 					antw = frage.getQuizfrage().get(i).getAntwort().get(j);
-					System.out.println("Antwort"+(j+1)+": "+antw.getValue());
+					antworten.add(antw.getValue());
 				}
-				break;
 			}
 		}
-		
-		return frage;
+		return antworten;
 	}
-
+	
 	/**
-	 * Zeige alle Quizfragen mit Bilder, Genre und Antworten (nicht für Spieler relevant)
-	 * @return
+	 * Gebe zur Frage <code>nr</code> die Zeit
+	 * @param nr
+	 * @return String
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 */
-	@Path("/fragen")
-	@GET @Produces( "application/xml" )
-	public Quizgame getAllFragen() throws JAXBException, FileNotFoundException
+	public XMLGregorianCalendar getFragetime(Integer nr) throws JAXBException, FileNotFoundException
 	{
 		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
 		XMLHelper marsh = new XMLHelper();
 		Quizfrage found = obj.createQuizgameQuizfrage();
 		Antwort antw = obj.createQuizgameQuizfrageAntwort();
 		Quizgame frage = marsh.unmarshalQuizgame(QUIZ_XML);
+		XMLGregorianCalendar time = null;
 		
 		for(int i=0; i<frage.getQuizfrage().size(); i++){
 			found = frage.getQuizfrage().get(i);
-			System.out.println("\nFrage Nr: "+found.getNr());
-			System.out.println("Bild link: "+found.getBild().getLink());
-			System.out.println("Genre: "+found.getGenre());
-			System.out.println("Zeit: "+found.getTime());
-			for(int j=0; j<frage.getQuizfrage().get(i).getAntwort().size(); j++){
-			antw = frage.getQuizfrage().get(i).getAntwort().get(j);
-				System.out.println("Antwort"+(j+1)+": "+antw.getValue());
+			if (found.getNr() == nr.intValue()){
+				time = found.getTime();
 			}
 		}
 		
-		return frage;
+		return time;
 	}
-
+	
+	/**
+	 * Gebe zur Frage <code>nr</code> das genre
+	 * @param nr
+	 * @return String
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 */
+	public String getFrageGenre(Integer nr) throws JAXBException, FileNotFoundException
+	{
+		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
+		XMLHelper marsh = new XMLHelper();
+		Quizfrage found = obj.createQuizgameQuizfrage();
+		Antwort antw = obj.createQuizgameQuizfrageAntwort();
+		Quizgame frage = marsh.unmarshalQuizgame(QUIZ_XML);
+		String genre = new String();
+		
+		for(int i=0; i<frage.getQuizfrage().size(); i++){
+			found = frage.getQuizfrage().get(i);
+			if (found.getNr() == nr.intValue()){
+				genre = found.getGenre();
+			}
+		}
+		
+		return genre;
+	}
+	
+	/**
+	 * Gebe zur Frage <code>nr</code> den Link zum Bild 
+	 * @param nr
+	 * @return String
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 */
+	public String getFrageBild(Integer nr) throws JAXBException, FileNotFoundException
+	{
+		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
+		XMLHelper marsh = new XMLHelper();
+		Quizfrage found = obj.createQuizgameQuizfrage();
+		Antwort antw = obj.createQuizgameQuizfrageAntwort();
+		Quizgame frage = marsh.unmarshalQuizgame(QUIZ_XML);
+		String bild = new String();
+		
+		for(int i=0; i<frage.getQuizfrage().size(); i++){
+			found = frage.getQuizfrage().get(i);
+			if (found.getNr() == nr.intValue()){
+				bild = found.getBild().getLink();
+			}
+		}
+		
+		return bild;
+	}
+	
 	/**
 	 * Zeige höchsten Score mit Spieler
-	 * @return
+	 * @return BigInteger
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
 	 */
-	@Path("/highscore")
-	@GET @Produces( "application/xml" )
-	public Quizgame getHighscore() throws JAXBException, FileNotFoundException
+	public BigInteger getHighscore() throws JAXBException, FileNotFoundException
 	{
 		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
 		XMLHelper marsh = new XMLHelper();
 		Quizgame.Highscore highscore = obj.createQuizgameHighscore();
 		Quizgame hscore = marsh.unmarshalQuizgame(QUIZ_XML);
 		highscore = hscore.getHighscore();
-		System.out.println("HighScore: "+highscore.getScore());
-		System.out.println("von "+highscore.getFrom());
+		BigInteger quizHighscore = highscore.getScore();
 		
-		return hscore;
+		return quizHighscore;
+	}
+	
+	/**
+	 * Name des Highscore Besitzers
+	 * @return String
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 */
+	public String getHighscorePlayer() throws JAXBException, FileNotFoundException
+	{
+		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
+		XMLHelper marsh = new XMLHelper();
+		Quizgame.Highscore highscore = obj.createQuizgameHighscore();
+		Quizgame hscore = marsh.unmarshalQuizgame(QUIZ_XML);
+		highscore = hscore.getHighscore();
+		String name = highscore.getFrom();
+		
+		return name;
 	}
 	
 	/**
 	 * Update höchsten Score 
-	 * @return
+	 * @param name
+	 * @param score
+	 * @returnQuizgame
 	 * @throws JAXBException
 	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
-	@Path("/highscore/update")
-	@GET @Produces( "application/xml" )
-	public Quizgame updateHighscore(@QueryParam("name") String name, @QueryParam("score") BigInteger score) throws JAXBException, FileNotFoundException, IOException
+	public void updateHighscore(String name, BigInteger score) throws JAXBException, FileNotFoundException, IOException
 	{	
 		de.xml.ObjectFactory obj = new de.xml.ObjectFactory();
 		XMLHelper creator = new XMLHelper();
@@ -303,7 +419,6 @@ public class MVQService {
 		
 		Quizgame.Highscore hscore = creator.createHighscore(name, score, highscore);
 		unquiz.setHighscore(hscore);
-		
-		return creator.marshalQuizgame(QUIZ_XML, unquiz);
+		creator.marshalQuizgame(QUIZ_XML, unquiz);
 	}
 }

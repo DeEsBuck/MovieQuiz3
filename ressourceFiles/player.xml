@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <players xmlns="http://www.example.org/moviequiz">
-    <player id="1">
-        <name>Harald</name>
-        <wins>299</wins>
-        <loss>1</loss>
-    </player>
-    <player id="2">
-        <name>Bernd</name>
-        <wins>299</wins>
-        <loss>1</loss>
+    <player id="8138">
+        <name>Hannes</name>
+        <wins>200</wins>
+        <loss>900</loss>
     </player>
 </players>

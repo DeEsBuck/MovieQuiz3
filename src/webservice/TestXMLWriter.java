@@ -2,13 +2,18 @@ package webservice;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.transform.Result;
 
 import de.xml.Players;
 import de.xml.Players.Player;
@@ -18,7 +23,7 @@ import de.xml.Quizgame.Quizfrage.Antwort;
 import de.xml.Quizgame.Quizfrage.Bild;
 
 
-public class TestXMLWriter {
+public class TestXMLWriter {	
 	private static final String QUIZ_XML= "./././ressourceFiles/quiz.xml";
 	private static final String PLAYER_XML= "./././ressourceFiles/player.xml";
 	private static final String LINK="http://localhost:4434/bild/nr";
@@ -30,6 +35,22 @@ public class TestXMLWriter {
 	//Erzeuegen von neuen XML Daten soll vom Client aus steuerbar sein, siehe mvqService.java 
 	
 	public static void main(String[] args) throws JAXBException, IOException {
+//		URL url = new URL("http://advm1.gm.fh-koeln.de");
+//		URL urlQuiz = new URL("http://advm1.gm.fh-koeln.de/~mi809/wba/xml/quiz.xml");
+//		URL urlPlayer = new URL("http://advm1.gm.fh-koeln.de/~mi809/wba/xml/player.xml");
+//		URLConnection connect = urlQuiz.openConnection();
+//		
+//		connect.setDoInput(true);
+//		connect.setDoOutput(true);
+//		System.out.println("URL-toString(): "+connect.toString());
+//		System.out.println("URL-getContentType(): "+connect.getContentType());
+//		System.out.println("URL-getContentEncoding(): "+connect.getContentEncoding());
+//		System.out.println("URL-getContent(): "+connect.getContent());
+//		OutputStream output = connect.getOutputStream();
+//		
+//		InputStream input = connect.getInputStream();
+		
+		
 		ArrayList<Quizgame.Quizfrage> fragen = new ArrayList<Quizgame.Quizfrage>();
 		ArrayList<Player> players = new ArrayList<Player>();
 		
@@ -86,11 +107,15 @@ public class TestXMLWriter {
 			wr2 = new FileWriter(PLAYER_XML);
 			m.marshal(quiz, wr);
 			m.marshal(player, wr2);
+//			Result b;
+//			m.marshal(quiz, b);
+//			output.write((int)b);
 		}
 		finally {
 			try {
 				wr.close();
 				wr2.close();
+//				output.close();
 			}
 			catch (Exception e) {
 				e.printStackTrace();
